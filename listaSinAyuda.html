@@ -4,22 +4,22 @@
     <meta charset="UTF-8">
     <meta name="author" content="Peinado Prieto, David">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>LISTA CON AYUDA DE LAS PROPIEDADES DE ARRAY</title>
+    <title>LISTA SIN AYUDA DE LAS PROPIEDADES DE ARRAY</title>
 </head>
 <body>
-        <h1>Implementación de una Lista con facilidades de array</h1>
+        <h1>Implementación de una Lista sin facilidades de array</h1>
         Introduce un número: <br/>
-        <input type="text" id="numero" value="" placeholder="Entero" onclick="limpiarDatos ()" />
+        <input type="text" id="numumero" value="" placeholder="Entero" onfocus="limpiarDatos ()" />
         <button id="aniadirButton" onclick="aniadirNumero ();">Añade número</button>
         <button id="eliminarButton" onclick="borrarNumero ();">Borra número</button>
-        
+      
         <br/><br/>
-		
-		</div>
+      
         <div id="error" style="color:red"></div> 
         <div id="lista">
         </div>
-        <script src="js/listaConAyuda.js"></script>
+        <script src="js/listaSinAyuda.js"></script>
         <script src="js/funcionalidad.js"></script>
+    
 </body>
 </html>
