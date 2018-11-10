@@ -1,60 +1,66 @@
 //Nos creamos una constante para el fijar el número máximo de elementos
-const MAX_ELEMEN_LISTA = 5;
+const MAX_ELEM_LISTA = 5;
 
-// Funciones que nos determinarán el estado de la lista: capacidad, tamaño, si está vacía o no.
-
-// Crea una lista con el array ya instanciado con el número de elementos máximos
+/*Crea una lista con el array ya instanciado con el número de elementos máximos.
+Recorremos toda la lista e inicializamos cada elemento con NaN*/
 function create() {
     var lista = [];
+    for (var i = 0; i < MAX_ELEM_LISTA; i++) {
+        lista[i] = NaN;
+    }
     return lista;
 }
 
 //Comprueba que el índice introducido no esté fuera de rango de elementos ocupados 
 function fueraRango(lista, posicion) {
-    return (posicion > (lista.length - 1) || posicion < 0);
+    return (posicion > (size(lista) - 1) || posicion < 0);
 }
 
 //Devuelve true o false en función de si la lista está vacía
 function isEmpty(lista) {
-    return (lista.length == 0);
+    return (isNaN(lista[0]));
 }
 
-//Devuelve true o false en función de si la lista está llena
+//Devuelve true o false en función de si la lista está llena.No se tienen en cuenta los NaN
 function isFull(lista) {
-    return (lista.length == MAX_ELEMEN_LISTA);
+    return !isNaN(lista[lista.length - 1]);
 }
 
-//Devuelve el número de elementos de la lista.
+//Devuelve el número de elementos reales de la lista, es decir sin contar los NaN
 function size(lista) {
-    return lista.length;
+    var tamanio = 0;
+    while (tamanio < MAX_ELEM_LISTA && !isNaN(lista[tamanio])) { //Recorremos para saber cuál es el primer elemento NaN
+        tamanio++;
+    }
+    return tamanio;
 }
 
 //Añade un nuevo elemento al final de la lista. Devuelve el tamaño de la lista una vez añadido.
 function add(lista, elemento) {
     var auxiliar;
-	if (isNaN(elemento)) {
+    if (isNaN(elemento)) {
         throw "El elemento no es un Number";
     }
     if (isFull(lista)) {
-    	throw "La lista está llena";
+        throw "La lista está llena";
     }
-	if (lista.length == 0){
-		lista[0] = elemento;
-	}else{
-		var posicion = -1;
-		do{
-			posicion++;
-		}while(lista[posicion] <= elemento && posicion < lista.length);
-		
-		for (var i = lista.length - 1 ; i >= posicion; i--){
-			lista[i+1] = lista[i];
-		}
-		lista[i+1] = elemento;
-	}
- 	return lista.length;
+    if (size(lista) == 0) {
+        lista[0] = elemento;
+    } else {
+        var posicion = -1;
+        do {
+            posicion++;// si la posición es -1, al principio, aumentamos
+        } while (lista[posicion] <= elemento && posicion < size(lista));
+        // recorremos hacía atrás, hasta la posicón final
+        for (var i = size(lista) - 1; i >= posicion; i--) {
+            lista[i + 1] = lista[i];
+        }
+        lista[i + 1] = elemento;
+    }
+    return size(lista);
 }
 
-//Devuelve el elemento de la lista de la posición indicada.
+//Devuelve el elemento de la lista de la posición indicada
 function get(lista, posicion) {
     if (fueraRango(lista, posicion)) {
         throw "El índice está fuera de los límites de la lista";
@@ -66,8 +72,7 @@ function get(lista, posicion) {
 function toString(lista) {
     var texto = "";
     if (!isEmpty(lista)) {
-        var length_1 = lista.length - 1;
-        for (var i = 0; i < length_1; i++) {
+        for (var i = 0; i < size(lista) - 1; i++) {
             texto = texto + lista[i] + " - ";
         }
         texto = texto + lista[i];
@@ -77,27 +82,36 @@ function toString(lista) {
 
 //Devuelve la posición del elemento indicado. Si el elemento no está en la lista devuelve -1.
 function indexOf(lista, elemento) {
+    var posicion = -1;
+    var i = 0;
     if (isNaN(elemento)) {
-    	throw "El elemento no es un Number";
+        throw "El elemento no es un Number";
     }
-    return lista.indexOf(elemento);
+    while (posicion == -1 && i < size(lista)) {
+        if (lista[i] == elemento) {
+            posicion = i;
+        }
+        i++;
+    }
+    return posicion;
 }
 
-
-//Devuelve el máximo número de elementos que podemos tener en la lista.
+//Devuelve el máximo número de elementos que podemos tener en la lista
 function capacity(lista) {
-    return MAX_ELEMEN_LISTA;
+    return MAX_ELEM_LISTA;
 }
 
 //Vacía la lista
 function clear(lista) {
-	lista.splice(0, (MAX_ELEMEN_LISTA));
+    for (i = 0; i < MAX_ELEM_LISTA; i++) {
+        lista[i] = NaN;
+    }
 }
 
 //Devuelve el primer elemento de la lista
 function firstElement(lista) {
     if (isEmpty(lista)) {
-    	throw "La lista está vacía.";
+        throw "La lista está vacía.";
     }
     return lista[0];
 }
@@ -105,42 +119,48 @@ function firstElement(lista) {
 //Devuelve el último elemento de la lista
 function lastElement(lista) {
     if (isEmpty(lista)) {
-    	throw "La lista está vacía.";
+        throw "La lista está vacía.";
     }
-    return lista[lista.length - 1];
+    return lista[size(lista) - 1];
 }
 
 //Elimina el elemento de la posición indicada. Devuelve el elemento borrado
 function remove(lista, posicion) {
+    var elemento;
     if (fueraRango(lista, posicion)) {
         throw "El índice está fuera de los límites de la lista";
     }
-    return lista.splice(posicion, 1);
+    elemento = lista[posicion];
+    for (i = posicion; i < size(lista) - 1; i++) {
+        lista[i] = lista[i + 1];
+    }
+    lista[i] = NaN;
+    return elemento;
 }
+
+
 
 //Elimina el elemento indicado de la lista. Devuelve true si se ha podido borrar el elemento, false en caso contrario
 function removeElement(lista, elemento) {
     var borrado = false;
-    var posicion;
-    if (isNaN(elemento)) {
-    	throw "El elemento no es un Number";
+    var indice = indexOf(lista, elemento);
+    if (isEmpty(lista)) {
+        throw "La lista está vacía.";
     }
-    posicion = indexOf(lista, elemento);
-    if (posicion > -1){
-    	lista.splice(posicion, 1);
-    	borrado = true;
+    if (indice > -1) {
+        remove(lista, indice);
+        borrado = true;
     }
     return borrado;
 }
 
 //Elimina el último elemento de la lista. Salta una excepción cuando la lista se encuentra vacía.
-function poll(lista){
-    if (isEmpty(lista)){ 		
+function poll(lista) {
+    if (isEmpty(lista)) {
         throw "La lista se encuentra vacía. No se pueden quitar elementos";
     }
-    return lista.pop(); 
-}  
-
+    return remove(lista, size(lista)-1);
+}
 
 function testlista() {
     try {

@@ -4,17 +4,18 @@
     <meta charset="UTF-8">
     <meta name="author" content="Peinado Prieto, David">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>LISTA SIN AYUDA DE LAS PROPIEDADES DE ARRAY</title>
+    <title>LISTA SIN AYUDA DE LAS FACILIDADES DE ARRAY</title>
 </head>
 <body>
         <h1>Implementación de una Lista sin facilidades de array</h1>
         Introduce un número: <br/>
-        <input type="text" id="numumero" value="" placeholder="Entero" onfocus="limpiarDatos ()" />
+        <input type="text" id="numero" value="" placeholder="Entero" onclick="limpiarDatos ()" />
         <button id="aniadirButton" onclick="aniadirNumero ();">Añade número</button>
         <button id="eliminarButton" onclick="borrarNumero ();">Borra número</button>
-      
+        
         <br/><br/>
-      
+		
+		</div>
         <div id="error" style="color:red"></div> 
         <div id="lista">
         </div>
